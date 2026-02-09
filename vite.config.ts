@@ -2,13 +2,13 @@ import path from "path"
 import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
 import { VitePWA } from "vite-plugin-pwa"
-import { defineConfig } from "vite"
+import { defineConfig, type PluginOption } from "vite"
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(),
+    tailwindcss() as unknown as PluginOption,
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: [
@@ -74,7 +74,7 @@ export default defineConfig({
           },
         ],
       },
-    }),
+    }) as unknown as PluginOption,
   ],
   resolve: {
     alias: {
