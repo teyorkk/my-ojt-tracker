@@ -135,14 +135,14 @@ export async function uploadPhoto(
   const filePath = `${user.id}/${logId}/${Date.now()}-${file.name}`;
 
   const { error: uploadError } = await supabase.storage
-    .from("ojt-photos")
+    .from("ojt-logs")
     .upload(filePath, file, { cacheControl: "3600", upsert: false });
 
   if (uploadError) throw uploadError;
 
   // Get public URL
   const { data: urlData } = supabase.storage
-    .from("ojt-photos")
+    .from("ojt-logs")
     .getPublicUrl(filePath);
 
   // Insert photo record
@@ -160,10 +160,10 @@ export async function uploadPhoto(
 export async function deletePhoto(photo: Photo): Promise<void> {
   // Extract storage path from URL
   const url = new URL(photo.image_url);
-  const pathParts = url.pathname.split("/storage/v1/object/public/ojt-photos/");
+  const pathParts = url.pathname.split("/storage/v1/object/public/ojt-logs/");
   if (pathParts[1]) {
     await supabase.storage
-      .from("ojt-photos")
+      .from("ojt-logs")
       .remove([decodeURIComponent(pathParts[1])]);
   }
 
