@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { getTimeLogs, upsertTimeLog, getSettings } from "@/services/supabase-service";
+import { getTimeLogs, upsertTimeLog, getSettings } from "@/services/sync-service";
 import type { TimeLog, DashboardStats } from "@/lib/types";
 import { format } from "date-fns";
 import {

@@ -1,18 +1,49 @@
 import { Outlet } from "react-router-dom";
-import AppHeader from "@/components/app-header";
+import AppSidebar from "@/components/app-sidebar";
+import { useSidebar } from "@/hooks/use-sidebar";
 
 /**
- * Main layout wrapper. Renders the header and page content
- * with consistent max-width and padding. Adds bottom padding
- * on mobile to account for the fixed bottom nav.
+ * Main layout wrapper. Renders the sidebar and page content.
+ * On desktop the main area is offset by the sidebar width.
  */
 export default function AppLayout() {
+  const { collapsed } = useSidebar();
+
+  // Sidebar is hidden on mobile (md:hidden), so we only apply margin on md+.
+  // Use a CSS media query approach via a wrapper that gets margin on md screens.
+  const sidebarOffset = collapsed ? 68 : 240;
+
   return (
     <div className="min-h-screen bg-background">
-      <AppHeader />
-      <main className="mx-auto max-w-5xl px-4 py-6 pb-20 md:pb-6">
-        <Outlet />
-      </main>
+      <AppSidebar />
+      <SidebarOffset offset={sidebarOffset}>
+        <div className="mx-auto max-w-5xl px-4 py-6">
+          <Outlet />
+        </div>
+      </SidebarOffset>
     </div>
+  );
+}
+
+/** Applies left margin only on md+ screens via inline media query workaround. */
+function SidebarOffset({
+  offset,
+  children,
+}: {
+  offset: number;
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <style>{`
+        @media (min-width: 768px) {
+          .sidebar-offset {
+            margin-left: ${offset}px;
+            transition: margin-left 300ms;
+          }
+        }
+      `}</style>
+      <main className="sidebar-offset">{children}</main>
+    </>
   );
 }

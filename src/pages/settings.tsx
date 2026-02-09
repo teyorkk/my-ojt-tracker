@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useTheme, ACCENT_COLORS } from "@/hooks/use-theme";
-import { getSettings, updateSettings } from "@/services/supabase-service";
+import { getSettings, updateSettings } from "@/services/sync-service";
 import {
   Card,
   CardContent,

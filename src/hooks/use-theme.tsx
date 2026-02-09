@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { supabase } from "@/lib/supabase";
-import { updateThemeSettings } from "@/services/supabase-service";
+import { updateThemeSettings } from "@/services/sync-service";
 
 /* ===== Theme Types ===== */
 

@@ -8,7 +8,7 @@ import {
   deleteTask,
   uploadPhoto,
   deletePhoto,
-} from "@/services/supabase-service";
+} from "@/services/sync-service";
 import type { Task, Photo } from "@/lib/types";
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
