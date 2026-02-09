@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { supabase } from "@/lib/supabase";
-import { updateThemeSettings } from "@/services/sync-service";
+import { updateThemeSettings } from "@/services/supabase-service";
 
 /* ===== Theme Types ===== */
 
@@ -83,12 +83,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       async (event) => {
         if (event === "SIGNED_IN") {
           try {
-            const user = (await supabase.auth.getUser()).data.user;
-            if (!user) return;
+            const { data: { session: authSession } } = await supabase.auth.getSession();
+            if (!authSession?.user) return;
             const { data } = await supabase
               .from("settings")
               .select("accent_color, theme")
-              .eq("user_id", user.id)
+              .eq("user_id", authSession.user.id)
               .maybeSingle();
             if (data) {
               const dbTheme = (data.theme === "dark" ? "dark" : "light") as Theme;

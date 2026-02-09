@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getTimeLogs } from "@/services/sync-service";
+import { getTimeLogs } from "@/services/supabase-service";
 import type { TimeLog } from "@/lib/types";
 import {
   format,

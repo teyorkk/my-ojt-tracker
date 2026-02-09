@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ThemeProvider } from "@/hooks/use-theme";
-import { SyncProvider } from "@/hooks/use-sync";
 import { SidebarProvider } from "@/hooks/use-sidebar";
 import ProtectedRoute from "@/components/protected-route";
 import AppLayout from "@/components/app-layout";
@@ -22,8 +21,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <SyncProvider>
-            <SidebarProvider>
+          <SidebarProvider>
               <Routes>
                 {/* Public route */}
                 <Route path="/login" element={<LoginPage />} />
@@ -42,8 +40,7 @@ function App() {
                 {/* Catch-all */}
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
-            </SidebarProvider>
-          </SyncProvider>
+          </SidebarProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

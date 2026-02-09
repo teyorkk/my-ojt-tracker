@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
-import { useSync } from "@/hooks/use-sync";
 import { useSidebar } from "@/hooks/use-sidebar";
 import {
   LayoutDashboard,
@@ -14,9 +13,6 @@ import {
   PanelLeftClose,
   PanelLeft,
   Menu,
-  Wifi,
-  WifiOff,
-  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -32,7 +28,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
 
 const navItems = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -52,7 +47,6 @@ function DesktopSidebar() {
   const location = useLocation();
   const { signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { online, isSyncing, pendingCount, triggerSync } = useSync();
 
   const width = collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH_EXPANDED;
 
@@ -127,65 +121,6 @@ function DesktopSidebar() {
 
         {/* Footer */}
         <div className="mt-auto space-y-1 px-2 py-3">
-          {/* Online status + sync */}
-          {collapsed ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-full"
-                  onClick={online && pendingCount > 0 ? triggerSync : undefined}
-                >
-                  {isSyncing ? (
-                    <RefreshCw className="h-4 w-4 animate-spin" />
-                  ) : online ? (
-                    <Wifi className="h-4 w-4 text-green-500" />
-                  ) : (
-                    <WifiOff className="h-4 w-4 text-red-500" />
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                {isSyncing
-                  ? "Syncing…"
-                  : online
-                    ? pendingCount > 0
-                      ? `Online · ${pendingCount} pending`
-                      : "Online"
-                    : `Offline · ${pendingCount} pending`}
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-3"
-              onClick={online && pendingCount > 0 ? triggerSync : undefined}
-            >
-              {isSyncing ? (
-                <RefreshCw className="h-4 w-4 animate-spin shrink-0" />
-              ) : online ? (
-                <Wifi className="h-4 w-4 text-green-500 shrink-0" />
-              ) : (
-                <WifiOff className="h-4 w-4 text-red-500 shrink-0" />
-              )}
-              <span className="truncate text-sm">
-                {isSyncing
-                  ? "Syncing…"
-                  : online
-                    ? "Online"
-                    : "Offline"}
-              </span>
-              {pendingCount > 0 && (
-                <Badge variant="secondary" className="ml-auto text-xs">
-                  {pendingCount}
-                </Badge>
-              )}
-            </Button>
-          )}
-
-          <Separator />
-
           {/* Theme toggle */}
           {collapsed ? (
             <Tooltip>
@@ -224,6 +159,8 @@ function DesktopSidebar() {
               </span>
             </Button>
           )}
+
+          <Separator />
 
           {/* Sign out */}
           {collapsed ? (
@@ -266,7 +203,6 @@ function MobileSidebar() {
   const location = useLocation();
   const { signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { online, isSyncing, pendingCount, triggerSync } = useSync();
 
   // Close sheet on navigation
   useEffect(() => {
@@ -324,35 +260,6 @@ function MobileSidebar() {
 
             {/* Footer */}
             <div className="space-y-1 px-3 py-3">
-              {/* Sync status */}
-              <Button
-                variant="ghost"
-                className="w-full justify-start gap-3"
-                onClick={online && pendingCount > 0 ? triggerSync : undefined}
-              >
-                {isSyncing ? (
-                  <RefreshCw className="h-4 w-4 animate-spin" />
-                ) : online ? (
-                  <Wifi className="h-4 w-4 text-green-500" />
-                ) : (
-                  <WifiOff className="h-4 w-4 text-red-500" />
-                )}
-                <span className="text-sm">
-                  {isSyncing
-                    ? "Syncing…"
-                    : online
-                      ? "Online"
-                      : "Offline"}
-                </span>
-                {pendingCount > 0 && (
-                  <Badge variant="secondary" className="ml-auto text-xs">
-                    {pendingCount}
-                  </Badge>
-                )}
-              </Button>
-
-              <Separator />
-
               {/* Theme */}
               <Button
                 variant="ghost"
@@ -385,17 +292,6 @@ function MobileSidebar() {
         <span className="ml-3 text-lg font-semibold tracking-tight">
           OJT Tracker
         </span>
-
-        {/* Online indicator on mobile header */}
-        <div className="ml-auto flex items-center gap-2">
-          {isSyncing ? (
-            <RefreshCw className="h-4 w-4 animate-spin text-muted-foreground" />
-          ) : online ? (
-            <Wifi className="h-3.5 w-3.5 text-green-500" />
-          ) : (
-            <WifiOff className="h-3.5 w-3.5 text-red-500" />
-          )}
-        </div>
       </header>
     </div>
   );

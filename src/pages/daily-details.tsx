@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getDailyLogEntry, deleteTask, deletePhoto } from "@/services/sync-service";
+import { getDailyLogEntry, deleteTask, deletePhoto } from "@/services/supabase-service";
 import type { DailyLogEntry } from "@/lib/types";
 import { format } from "date-fns";
 import {
