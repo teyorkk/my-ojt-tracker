@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Loader2, KeyRound } from "lucide-react";
+import { motion } from "framer-motion";
 
 /**
  * Login page -- email + password authentication via Supabase.
@@ -55,7 +56,13 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
-      <Card className="w-full max-w-sm">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="w-full max-w-sm"
+      >
+      <Card>
         <CardHeader className="text-center">
           <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
             <KeyRound className="h-5 w-5 text-primary" />
@@ -111,6 +118,7 @@ export default function LoginPage() {
           </form>
         </CardContent>
       </Card>
+      </motion.div>
     </div>
   );
 }

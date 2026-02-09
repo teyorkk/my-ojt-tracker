@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { useTheme } from "@/hooks/use-theme";
+import { useTheme, ACCENT_COLORS } from "@/hooks/use-theme";
 import { getSettings, updateSettings } from "@/services/supabase-service";
 import {
   Card,
@@ -31,13 +31,15 @@ import {
   Moon,
   RotateCcw,
   Sliders,
+  Palette,
 } from "lucide-react";
+import PageTransition from "@/components/page-transition";
 
 /**
  * Settings page -- configure required OJT hours and theme.
  */
 export default function SettingsPage() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, accentColor, setAccentColor } = useTheme();
   const [requiredHours, setRequiredHours] = useState<number>(600);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -87,6 +89,7 @@ export default function SettingsPage() {
   function handleResetLocal() {
     localStorage.clear();
     setTheme("light");
+    setAccentColor("green");
     window.location.reload();
   }
 
@@ -99,7 +102,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <PageTransition className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
         <p className="text-sm text-muted-foreground">
@@ -201,7 +204,48 @@ export default function SettingsPage() {
           </div>
         </CardContent>
       </Card>
-
+      {/* Accent color */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Palette className="h-4 w-4 text-primary" />
+            Accent Color
+          </CardTitle>
+          <CardDescription>
+            Pick a primary color for the interface.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-3">
+            {ACCENT_COLORS.map((color) => (
+              <button
+                key={color.value}
+                type="button"
+                onClick={() => setAccentColor(color.value)}
+                className={`group flex flex-col items-center gap-1.5`}
+              >
+                <span
+                  className={`block h-8 w-8 rounded-full border-2 transition-all ${
+                    accentColor === color.value
+                      ? "border-foreground scale-110"
+                      : "border-transparent hover:scale-105"
+                  }`}
+                  style={{ backgroundColor: color.swatch }}
+                />
+                <span
+                  className={`text-xs ${
+                    accentColor === color.value
+                      ? "font-medium text-foreground"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  {color.label}
+                </span>
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
       <Separator />
 
       {/* Danger zone */}
@@ -243,6 +287,6 @@ export default function SettingsPage() {
           </AlertDialog>
         </CardContent>
       </Card>
-    </div>
+    </PageTransition>
   );
 }

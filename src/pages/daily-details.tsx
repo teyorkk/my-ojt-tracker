@@ -37,6 +37,7 @@ import {
   Trash2,
   ArrowLeft,
 } from "lucide-react";
+import PageTransition from "@/components/page-transition";
 
 /**
  * Daily details page -- shows time info, tasks, and photos for a single day.
@@ -98,7 +99,7 @@ export default function DailyDetailsPage() {
     : "";
 
   return (
-    <div className="space-y-6">
+    <PageTransition className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -320,6 +321,6 @@ export default function DailyDetailsPage() {
           </Card>
         </>
       )}
-    </div>
+    </PageTransition>
   );
 }

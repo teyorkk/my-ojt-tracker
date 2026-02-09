@@ -40,6 +40,7 @@ import {
   ClipboardList,
   Image,
 } from "lucide-react";
+import PageTransition from "@/components/page-transition";
 
 /**
  * Add / Edit Log page -- allows creating or editing a day's time entry,
@@ -251,7 +252,7 @@ export default function EditLogPage() {
     : "";
 
   return (
-    <div className="space-y-6">
+    <PageTransition className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link to={`/logs/${date}`}>
@@ -541,6 +542,6 @@ export default function EditLogPage() {
           Done
         </Button>
       </div>
-    </div>
+    </PageTransition>
   );
 }

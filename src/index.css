@@ -3,7 +3,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ===== GREEN THEME – OJT Tracker ===== */
+/*
+ * Accent color system
+ * Default (green) is on :root / .dark
+ * Other accents override the primary-related vars via [data-accent]
+ */
+
+/* ===== BASE: Green (default) ===== */
 :root {
   --radius: 0.625rem;
   --background: oklch(0.985 0.002 120);
@@ -75,6 +81,109 @@
   --sidebar-ring: oklch(0.596 0.16 145.023);
 }
 
+/* ===== BLUE ACCENT ===== */
+[data-accent="blue"] {
+  --primary: oklch(0.546 0.205 262.881);
+  --ring: oklch(0.546 0.205 262.881);
+  --chart-1: oklch(0.546 0.205 262.881);
+  --sidebar-primary: oklch(0.546 0.205 262.881);
+  --sidebar-ring: oklch(0.546 0.205 262.881);
+}
+[data-accent="blue"].dark,
+.dark[data-accent="blue"] {
+  --primary: oklch(0.623 0.214 259.815);
+  --ring: oklch(0.623 0.214 259.815);
+  --chart-1: oklch(0.623 0.214 259.815);
+  --sidebar-primary: oklch(0.623 0.214 259.815);
+  --sidebar-ring: oklch(0.623 0.214 259.815);
+}
+
+/* ===== RED ACCENT ===== */
+[data-accent="red"] {
+  --primary: oklch(0.577 0.245 27.325);
+  --ring: oklch(0.577 0.245 27.325);
+  --chart-1: oklch(0.577 0.245 27.325);
+  --sidebar-primary: oklch(0.577 0.245 27.325);
+  --sidebar-ring: oklch(0.577 0.245 27.325);
+}
+[data-accent="red"].dark,
+.dark[data-accent="red"] {
+  --primary: oklch(0.704 0.191 22.216);
+  --ring: oklch(0.704 0.191 22.216);
+  --chart-1: oklch(0.704 0.191 22.216);
+  --sidebar-primary: oklch(0.704 0.191 22.216);
+  --sidebar-ring: oklch(0.704 0.191 22.216);
+}
+
+/* ===== ORANGE ACCENT ===== */
+[data-accent="orange"] {
+  --primary: oklch(0.705 0.191 47.604);
+  --ring: oklch(0.705 0.191 47.604);
+  --chart-1: oklch(0.705 0.191 47.604);
+  --sidebar-primary: oklch(0.705 0.191 47.604);
+  --sidebar-ring: oklch(0.705 0.191 47.604);
+}
+[data-accent="orange"].dark,
+.dark[data-accent="orange"] {
+  --primary: oklch(0.759 0.179 55.934);
+  --ring: oklch(0.759 0.179 55.934);
+  --chart-1: oklch(0.759 0.179 55.934);
+  --sidebar-primary: oklch(0.759 0.179 55.934);
+  --sidebar-ring: oklch(0.759 0.179 55.934);
+}
+
+/* ===== PURPLE ACCENT ===== */
+[data-accent="purple"] {
+  --primary: oklch(0.553 0.235 303.374);
+  --ring: oklch(0.553 0.235 303.374);
+  --chart-1: oklch(0.553 0.235 303.374);
+  --sidebar-primary: oklch(0.553 0.235 303.374);
+  --sidebar-ring: oklch(0.553 0.235 303.374);
+}
+[data-accent="purple"].dark,
+.dark[data-accent="purple"] {
+  --primary: oklch(0.627 0.265 303.9);
+  --ring: oklch(0.627 0.265 303.9);
+  --chart-1: oklch(0.627 0.265 303.9);
+  --sidebar-primary: oklch(0.627 0.265 303.9);
+  --sidebar-ring: oklch(0.627 0.265 303.9);
+}
+
+/* ===== ROSE ACCENT ===== */
+[data-accent="rose"] {
+  --primary: oklch(0.585 0.22 350.1);
+  --ring: oklch(0.585 0.22 350.1);
+  --chart-1: oklch(0.585 0.22 350.1);
+  --sidebar-primary: oklch(0.585 0.22 350.1);
+  --sidebar-ring: oklch(0.585 0.22 350.1);
+}
+[data-accent="rose"].dark,
+.dark[data-accent="rose"] {
+  --primary: oklch(0.67 0.21 349.761);
+  --ring: oklch(0.67 0.21 349.761);
+  --chart-1: oklch(0.67 0.21 349.761);
+  --sidebar-primary: oklch(0.67 0.21 349.761);
+  --sidebar-ring: oklch(0.67 0.21 349.761);
+}
+
+/* ===== YELLOW ACCENT ===== */
+[data-accent="yellow"] {
+  --primary: oklch(0.795 0.184 86.047);
+  --ring: oklch(0.795 0.184 86.047);
+  --chart-1: oklch(0.795 0.184 86.047);
+  --sidebar-primary: oklch(0.795 0.184 86.047);
+  --sidebar-ring: oklch(0.795 0.184 86.047);
+}
+[data-accent="yellow"].dark,
+.dark[data-accent="yellow"] {
+  --primary: oklch(0.828 0.189 84.429);
+  --primary-foreground: oklch(0.145 0.015 120);
+  --ring: oklch(0.828 0.189 84.429);
+  --chart-1: oklch(0.828 0.189 84.429);
+  --sidebar-primary: oklch(0.828 0.189 84.429);
+  --sidebar-ring: oklch(0.828 0.189 84.429);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -117,6 +226,9 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  html {
+    scrollbar-gutter: stable;
   }
   body {
     @apply bg-background text-foreground;

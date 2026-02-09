@@ -24,6 +24,7 @@ import {
   Clock,
   Plus,
 } from "lucide-react";
+import PageTransition from "@/components/page-transition";
 
 /**
  * Daily logs page -- calendar view showing days with logged hours.
@@ -74,7 +75,7 @@ export default function DailyLogPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <PageTransition className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Daily Logs</h1>
@@ -224,6 +225,6 @@ export default function DailyLogPage() {
           ))}
         </CardContent>
       </Card>
-    </div>
+    </PageTransition>
   );
 }

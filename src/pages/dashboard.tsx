@@ -21,6 +21,7 @@ import {
   Loader2,
   AlertCircle,
 } from "lucide-react";
+import PageTransition, { StaggerItem } from "@/components/page-transition";
 
 /**
  * Dashboard page -- overview of OJT progress with time-in/out controls.
@@ -143,7 +144,7 @@ export default function DashboardPage() {
   const timedOut = todayLog?.time_out;
 
   return (
-    <div className="space-y-6">
+    <PageTransition className="space-y-6">
       {/* Greeting */}
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
@@ -162,26 +163,34 @@ export default function DashboardPage() {
 
       {/* Summary cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <SummaryCard
-          title="Required Hours"
-          value={`${stats.totalRequired}`}
-          icon={CalendarCheck}
-        />
-        <SummaryCard
-          title="Completed"
-          value={`${stats.totalCompleted.toFixed(1)}`}
-          icon={Clock}
-        />
-        <SummaryCard
-          title="Remaining"
-          value={`${stats.remaining.toFixed(1)}`}
-          icon={Hourglass}
-        />
-        <SummaryCard
-          title="Progress"
-          value={`${stats.percentage.toFixed(1)}%`}
-          icon={TrendingUp}
-        />
+        <StaggerItem index={0}>
+          <SummaryCard
+            title="Required Hours"
+            value={`${stats.totalRequired}`}
+            icon={CalendarCheck}
+          />
+        </StaggerItem>
+        <StaggerItem index={1}>
+          <SummaryCard
+            title="Completed"
+            value={`${stats.totalCompleted.toFixed(1)}`}
+            icon={Clock}
+          />
+        </StaggerItem>
+        <StaggerItem index={2}>
+          <SummaryCard
+            title="Remaining"
+            value={`${stats.remaining.toFixed(1)}`}
+            icon={Hourglass}
+          />
+        </StaggerItem>
+        <StaggerItem index={3}>
+          <SummaryCard
+            title="Progress"
+            value={`${stats.percentage.toFixed(1)}%`}
+            icon={TrendingUp}
+          />
+        </StaggerItem>
       </div>
 
       {/* Progress bar */}
@@ -250,7 +259,7 @@ export default function DashboardPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PageTransition>
   );
 }
 
