@@ -207,11 +207,16 @@ export async function getSettings(): Promise<Settings> {
 
   if (error) throw error;
 
-  // If no settings row exists, create one with a default of 600 hours
+  // If no settings row exists, create one with defaults
   if (!data) {
     const { data: newSettings, error: insertError } = await supabase
       .from("settings")
-      .insert({ user_id: user.id, required_ojt_hours: 600 })
+      .insert({
+        user_id: user.id,
+        required_ojt_hours: 600,
+        accent_color: "green",
+        theme: "light",
+      })
       .select()
       .single();
 
@@ -233,6 +238,33 @@ export async function updateSettings(
     .from("settings")
     .update({ required_ojt_hours: requiredHours })
     .eq("user_id", user.id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+/** Update the user's theme preferences (accent color and dark/light mode). */
+export async function updateThemeSettings(
+  accentColor: string,
+  theme: string
+): Promise<Settings> {
+  const user = (await supabase.auth.getUser()).data.user;
+  if (!user) throw new Error("Not authenticated");
+
+  // Upsert so it works even if no settings row exists yet
+  const { data, error } = await supabase
+    .from("settings")
+    .upsert(
+      {
+        user_id: user.id,
+        accent_color: accentColor,
+        theme,
+        required_ojt_hours: 600,
+      },
+      { onConflict: "user_id" }
+    )
     .select()
     .single();
 

@@ -32,6 +32,8 @@ export interface Settings {
   id: string;
   user_id: string;
   required_ojt_hours: number;
+  accent_color: string;
+  theme: string;
 }
 
 /* ===== Composite types used in the UI ===== */

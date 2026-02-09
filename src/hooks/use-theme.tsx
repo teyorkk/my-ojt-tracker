@@ -2,9 +2,12 @@ import {
   createContext,
   useContext,
   useEffect,
+  useCallback,
   useState,
   type ReactNode,
 } from "react";
+import { supabase } from "@/lib/supabase";
+import { updateThemeSettings } from "@/services/supabase-service";
 
 /* ===== Theme Types ===== */
 
@@ -39,6 +42,18 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+/* ===== helpers ===== */
+
+function applyThemeToDOM(theme: Theme, accent: AccentColor) {
+  const root = document.documentElement;
+  root.classList.toggle("dark", theme === "dark");
+  if (accent === "green") {
+    root.removeAttribute("data-accent");
+  } else {
+    root.setAttribute("data-accent", accent);
+  }
+}
+
 /* ===== Theme Provider ===== */
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -55,29 +70,68 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return stored ?? "green";
   });
 
+  // Apply to DOM whenever values change
   useEffect(() => {
-    const root = document.documentElement;
-    root.classList.toggle("dark", theme === "dark");
+    applyThemeToDOM(theme, accentColor);
     localStorage.setItem("ojt-theme", theme);
-  }, [theme]);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    // Green is the default (no attribute needed)
-    if (accentColor === "green") {
-      root.removeAttribute("data-accent");
-    } else {
-      root.setAttribute("data-accent", accentColor);
-    }
     localStorage.setItem("ojt-accent", accentColor);
-  }, [accentColor]);
+  }, [theme, accentColor]);
+
+  // On auth state change (login), load theme prefs from Supabase
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event) => {
+        if (event === "SIGNED_IN") {
+          try {
+            const user = (await supabase.auth.getUser()).data.user;
+            if (!user) return;
+            const { data } = await supabase
+              .from("settings")
+              .select("accent_color, theme")
+              .eq("user_id", user.id)
+              .maybeSingle();
+            if (data) {
+              const dbTheme = (data.theme === "dark" ? "dark" : "light") as Theme;
+              const dbAccent = (data.accent_color ?? "green") as AccentColor;
+              setThemeState(dbTheme);
+              setAccentColorState(dbAccent);
+              applyThemeToDOM(dbTheme, dbAccent);
+            }
+          } catch {
+            // Silently fall back to localStorage values
+          }
+        }
+      }
+    );
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Persist to Supabase (debounced-ish: fire-and-forget)
+  const persistToSupabase = useCallback(
+    (t: Theme, a: AccentColor) => {
+      updateThemeSettings(a, t).catch(() => {
+        // best-effort -- if offline the local values still apply
+      });
+    },
+    []
+  );
 
   const toggleTheme = () =>
-    setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
+    setThemeState((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      persistToSupabase(next, accentColor);
+      return next;
+    });
 
-  const setTheme = (t: Theme) => setThemeState(t);
+  const setTheme = (t: Theme) => {
+    setThemeState(t);
+    persistToSupabase(t, accentColor);
+  };
 
-  const setAccentColor = (color: AccentColor) => setAccentColorState(color);
+  const setAccentColor = (color: AccentColor) => {
+    setAccentColorState(color);
+    persistToSupabase(theme, color);
+  };
 
   return (
     <ThemeContext.Provider
